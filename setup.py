@@ -13,10 +13,10 @@ setup(
     ],
     install_requires=['setuptools'],
     zip_safe=True,
-    maintainer='ubuntu',
+    maintainer='Ryuichi Ueda',
     maintainer_email='ryuichiueda@gmail.com',
-    description='TODO: Package description',
-    license='TODO: License declaration',
+    description='ROS2 version of raspimouse_ros',
+    license='BSD-3-Clause',
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
