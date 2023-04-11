@@ -8,5 +8,9 @@ def generate_launch_description():
         package='raspimouse_tiny',
         executable='rtbuzzer',
         )
+    rtlightsensors = launch_ros.actions.Node(
+        package='raspimouse_tiny',
+        executable='rtlightsensors',
+        )
 
-    return launch.LaunchDescription([rtbuzzer])
+    return launch.LaunchDescription([rtbuzzer, rtlightsensors])

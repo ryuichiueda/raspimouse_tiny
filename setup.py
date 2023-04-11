@@ -24,6 +24,7 @@ setup(
     entry_points={
         'console_scripts': [
             'rtbuzzer = raspimouse_tiny.rtbuzzer:main',
+            'rtlightsensors = raspimouse_tiny.rtlightsensors:main',
         ],
     },
 )
