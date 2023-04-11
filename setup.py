@@ -26,6 +26,7 @@ setup(
             'buzzer = raspimouse_tiny.buzzer:main',
             'lightsensors = raspimouse_tiny.lightsensors:main',
             'switches = raspimouse_tiny.switches:main',
+            'motors = raspimouse_tiny.motors:main',
         ],
     },
 )

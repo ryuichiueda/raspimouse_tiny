@@ -18,5 +18,10 @@ def generate_launch_description():
         executable='switches',
         output='screen',
         )
+    motors = launch_ros.actions.Node(
+        package='raspimouse_tiny',
+        executable='motors',
+        output='screen',
+        )
 
     return launch.LaunchDescription([buzzer, lightsensors, switches])
