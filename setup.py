@@ -23,8 +23,9 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
-            'rtbuzzer = raspimouse_tiny.rtbuzzer:main',
-            'rtlightsensors = raspimouse_tiny.rtlightsensors:main',
+            'buzzer = raspimouse_tiny.buzzer:main',
+            'lightsensors = raspimouse_tiny.lightsensors:main',
+            'switches = raspimouse_tiny.switches:main',
         ],
     },
 )

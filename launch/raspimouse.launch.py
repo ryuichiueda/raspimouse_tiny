@@ -6,11 +6,11 @@ import launch_ros.actions
 def generate_launch_description():
     rtbuzzer = launch_ros.actions.Node(
         package='raspimouse_tiny',
-        executable='rtbuzzer',
+        executable='buzzer',
         )
     rtlightsensors = launch_ros.actions.Node(
         package='raspimouse_tiny',
-        executable='rtlightsensors',
+        executable='lightsensors',
         output='screen',
         )
 

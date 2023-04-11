@@ -7,7 +7,7 @@ from raspimouse_tiny_msgs.msg import LightSensorValues
 class LightSensors():
     def __init__(self, node_ref):
         self.node = node_ref
-        self.pub = self.node.create_publisher(LightSensorValues, "rtlightsensors", 10)
+        self.pub = self.node.create_publisher(LightSensorValues, "lightsensors", 10)
         self.node.create_timer(0.1, self.cb)
 
     def cb(self):
@@ -27,7 +27,7 @@ class LightSensors():
 
 def main():
     rclpy.init()
-    node = Node("rtlightsensors")
+    node = Node("lightsensors")
     talker = LightSensors(node)
     rclpy.spin(node)
 
