@@ -11,10 +11,10 @@ class Motors():
         #self.pub = self.node.create_publisher(LightSensorValues, "motors", 10)
         #self.node.create_timer(0.1, self.cb)
 
-        #self.sub_freqs = rospy.Subscriber('motor_raw', MotorFreqs, callback_motor_raw)
-        #self.sub_cmd_vel = rospy.Subscriber('cmd_vel', Twist, callback_cmd_vel)
+        #self.sub_freqs = rospy.Subscriber('motor_raw', MotorFreqs, self.callback_motor_raw)
+        #self.sub_cmd_vel = rospy.Subscriber('cmd_vel', Twist, self.callback_cmd_vel)
         self.srv_motor_power = self.node.create_service(SwitchMotors, 'switch_motors', self.callback_motor_sw)
-        #self.srv_freqs = node.create_service('put_motor_freqs', PutMotorFreqs, callback_put_freqs)
+        self.srv_freqs = self.node.create_service(PutMotorFreqs, 'put_motor_freqs', self.callback_put_freqs)
 
     def callback_motor_sw(self, request, response):
         enfile = '/dev/rtmotoren0'
@@ -28,6 +28,19 @@ class Motors():
             response.accepted = False
 
         return response    
+
+    def callback_put_freqs(self, request, response):
+        devfile = '/dev/rtmotor0'
+        try:
+            with open(devfile,'w') as f:
+                f.write("%s %s %s\n" % (request.left, request.right, request.duration))
+            response.accepted = True
+        except:
+            rospy.logerr("cannot write to " + devfile)
+            response.accepted = False
+
+        return response    
+
 
 def main():
     rclpy.init()
