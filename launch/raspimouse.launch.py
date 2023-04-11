@@ -24,4 +24,4 @@ def generate_launch_description():
         output='screen',
         )
 
-    return launch.LaunchDescription([buzzer, lightsensors, switches])
+    return launch.LaunchDescription([buzzer, lightsensors, switches, motors])
