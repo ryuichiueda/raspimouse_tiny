@@ -4,7 +4,7 @@ import rclpy
 from rclpy.node import Node
 from raspimouse_tiny_msgs.msg import LightSensorValues
 
-class Talker():
+class LightSensors():
     def __init__(self, node_ref):
         self.node = node_ref
         self.pub = self.node.create_publisher(LightSensorValues, "rtlightsensors", 10)
@@ -12,21 +12,25 @@ class Talker():
 
     def cb(self):
         devfile = '/dev/rtlightsensor0'
-        d = LightSensorValues()
         try:
-            with open(devfile,'r') as f:
+            with open(devfile, 'r') as f:
                 data = f.readline().split()
-                d = LightSensorValues()
-                d.right_forward = int(data[0])
-                d.right_side = int(data[1])
-                d.left_side = int(data[2])
-                d.left_forward = int(data[3])
-                self.pub.publish(d)
+                #self.node.get_logger().info("data: %s" % data[0])
+                msg = LightSensorValues()
+#                msg.right_forward = int(data[0])
+#                msg.right_side = int(data[1])
+#                msg.left_side = int(data[2])
+#                msg.left_forward = int(data[3])
+                self.pub.publish(msg)
         except:
-            self.node.logerr("cannot open " + devfile)
+            self.node.get_logger().info("cannot open " + devfile)
 
 def main():
     rclpy.init()
     node = Node("rtlightsensors")
-    talker = Talker(node)
+    talker = LightSensors(node)
     rclpy.spin(node)
+
+
+if __name__ == '__main__':
+    main()
