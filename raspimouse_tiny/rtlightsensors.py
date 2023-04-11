@@ -17,13 +17,13 @@ class LightSensors():
                 data = f.readline().split()
                 #self.node.get_logger().info("data: %s" % data[0])
                 msg = LightSensorValues()
-#                msg.right_forward = int(data[0])
-#                msg.right_side = int(data[1])
-#                msg.left_side = int(data[2])
-#                msg.left_forward = int(data[3])
+                msg.right_forward = int(data[0])
+                msg.right_side = int(data[1])
+                msg.left_side = int(data[2])
+                msg.left_forward = int(data[3])
                 self.pub.publish(msg)
         except:
-            self.node.get_logger().info("cannot open " + devfile)
+            self.node.get_logger().info("cannot publish")
 
 def main():
     rclpy.init()
