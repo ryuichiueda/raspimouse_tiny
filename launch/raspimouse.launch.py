@@ -4,14 +4,19 @@ import launch.substitutions
 import launch_ros.actions
 
 def generate_launch_description():
-    rtbuzzer = launch_ros.actions.Node(
+    buzzer = launch_ros.actions.Node(
         package='raspimouse_tiny',
         executable='buzzer',
         )
-    rtlightsensors = launch_ros.actions.Node(
+    lightsensors = launch_ros.actions.Node(
         package='raspimouse_tiny',
         executable='lightsensors',
         output='screen',
         )
+    switches = launch_ros.actions.Node(
+        package='raspimouse_tiny',
+        executable='switches',
+        output='screen',
+        )
 
-    return launch.LaunchDescription([rtbuzzer, rtlightsensors])
+    return launch.LaunchDescription([buzzer, lightsensors, switches])
