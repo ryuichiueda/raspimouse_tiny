@@ -25,8 +25,9 @@ def switch_motors(node, onoff):
             except:
                 node.get_logger().info('呼び出し失敗')
             else: #このelseは「exceptじゃなかったら」という意味のelse
-                node.get_logger().info("age: {}".format(res.accepted))
+                node.get_logger().info("res: {}".format(res.accepted))
             break #whileを出る
+
 
 def buzzer(node):
     node.get_logger().info("test of the buzzer")
@@ -38,14 +39,16 @@ def buzzer(node):
     msg.data = 0
     pub.publish(msg)
 
+
 def publish_motor(pub, left, right):
     d = MotorFreqs()
     d.left = left
     d.right = right
     pub.publish(d)
 
-def motor(node):
-    node.get_logger().info("test of the motors")
+
+def motor_raw(node):
+    node.get_logger().info("test of the motors (raw control)")
     pub = node.create_publisher(MotorFreqs, '/motor_raw', 10)
     publish_motor(pub,0,0)
     time.sleep(0.5)
@@ -57,6 +60,34 @@ def motor(node):
     time.sleep(0.5)
     publish_motor(pub,0,0)
 
+
+def motor_srv(node):
+    client = node.create_client(PutMotorFreqs, '/put_motor_freqs')
+    while not client.wait_for_service(timeout_sec=1.0):
+        node.get_logger().info('待機中')
+
+    call_motor_freq_service(node, client, 300, 300, 1000)
+    call_motor_freq_service(node, client, -300, -300, 1000)
+ 
+def call_motor_freq_service(node, client, left, right, duration):
+    req = PutMotorFreqs.Request()
+    req.left = left
+    req.right = right
+    req.duration = duration
+    future = client.call_async(req)
+
+    while rclpy.ok():
+        rclpy.spin_once(node)
+        if future.done():     #終わっていたら
+            try:
+                res = future.result() #結果を受取り
+            except:
+                node.get_logger().info('呼び出し失敗')
+            else: #このelseは「exceptじゃなかったら」という意味のelse
+                node.get_logger().info("res: {}".format(res.accepted))
+            break #whileを出る
+
+
 def main():
     rclpy.init()
     node = Node("checker")
@@ -64,7 +95,8 @@ def main():
     buzzer(node)
 
     switch_motors(node, True)
-    motor(node)
+    motor_raw(node)
+    motor_srv(node)
     switch_motors(node, False)
 
 if __name__ == '__main__':
