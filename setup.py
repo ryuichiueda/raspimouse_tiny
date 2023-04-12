@@ -27,6 +27,7 @@ setup(
             'lightsensors = raspimouse_tiny.lightsensors:main',
             'switches = raspimouse_tiny.switches:main',
             'motors = raspimouse_tiny.motors:main',
+            'check_driver_io = raspimouse_tiny.check_driver_io:main',
         ],
     },
 )
