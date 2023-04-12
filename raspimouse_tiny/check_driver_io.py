@@ -6,6 +6,8 @@ from std_msgs.msg import UInt16
 from raspimouse_tiny_msgs.srv import PutMotorFreqs
 from raspimouse_tiny_msgs.srv import SwitchMotors
 from raspimouse_tiny_msgs.msg import MotorFreqs
+from raspimouse_tiny_msgs.msg import LightSensorValues
+from raspimouse_tiny_msgs.msg import Switches
 from geometry_msgs.msg import Twist
 
 def switch_motors(node, onoff):
@@ -88,6 +90,25 @@ def call_motor_freq_service(node, client, left, right, duration):
             break #whileを出る
 
 
+class Sensors:
+    def __init__(self, node):
+        self.node = node
+        self.publs = node.create_subscription(LightSensorValues, '/lightsensors', self.lightsensor_callback, 10)
+        self.pubsw = node.create_subscription(Switches, '/switches', self.switch_callback, 10)
+
+    def lightsensor_callback(self, msg):
+        self.node.get_logger().info(
+                "lightsensors: {} {} {} {}"
+                    .format(msg.left_forward, msg.left_side, msg.right_side, msg.right_forward)
+                )
+    
+    def switch_callback(self, msg):
+        self.node.get_logger().info(
+                "                             switches: {} {} {}"
+                    .format(msg.front, msg.center, msg.rear)
+                )
+    
+    
 def main():
     rclpy.init()
     node = Node("checker")
@@ -98,6 +119,8 @@ def main():
     motor_raw(node)
     motor_srv(node)
     switch_motors(node, False)
+    Sensors(node)
+    rclpy.spin(node)
 
 if __name__ == '__main__':
     main()
