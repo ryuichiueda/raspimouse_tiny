@@ -24,8 +24,13 @@ class Buzzer:
 
 
     def music_cb(self, goal_handle):
-        self.node.get_logger().info('Executing goal...')
+        self.node.get_logger().info('Executing goal: {}'.format(goal_handle.request))
+
         result = Music.Result()
+        feedback = Music.Feedback()
+        result.finished = True
+        #num = len(goal_handle.request)
+
         return result
 
 
