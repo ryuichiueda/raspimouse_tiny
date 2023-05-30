@@ -6,34 +6,36 @@ from rclpy.action import ActionServer
 from std_msgs.msg import UInt16
 from raspimouse_tiny_msgs.action import Music
 
-def cb(msg):
-    global node
-    try:
-        with open('/dev/rtbuzzer0','w') as f:
-            f.write(str(msg.data) + "\n")
-    except:
-        node.get_logger().info("cannot open /dev/rtbuzzer0")
+class Buzzer:
+    def __init__(self):
+        rclpy.init()
+        self.node = Node("buzzer")
+        self.pub = self.node.create_subscription(UInt16, "buzzer", self.cb, 10)
+        rclpy.spin(node)
+
+    def cb(self, msg):
+        global node
+        try:
+            with open('/dev/rtbuzzer0','w') as f:
+                f.write(str(msg.data) + "\n")
+        except:
+            node.get_logger().info("cannot open /dev/rtbuzzer0")
 
 
-def music_cb(goal_handle):
-    global node
-    node.get_logger().info('Executing goal...')
-    result = Music.Result()
-    return result
+#def music_cb(goal_handle):
+#    global node
+#    node.get_logger().info('Executing goal...')
+#    result = Music.Result()
+#    return result
 
 
 def main():
-    rclpy.init()
-    node = Node("buzzer")
-    pub = node.create_subscription(UInt16, "buzzer", cb, 10)
-
-    music_server = ActionServer(
-            node,
-            Music,
-            'music',
-            music_cb)
-
-    rclpy.spin(node)
+    node = Buzzer()
+    #rclpy.init()
+    #node = Node("buzzer")
+    #pub = node.create_subscription(UInt16, "buzzer", cb, 10)
+#    music_server = ActionServer(node, Music, 'music', music_cb)
+ #   rclpy.spin(node)
 
 
 if __name__ == '__main__':
