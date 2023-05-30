@@ -11,7 +11,7 @@ class Buzzer:
         rclpy.init()
         self.node = Node("buzzer")
         self.pub = self.node.create_subscription(UInt16, "buzzer", self.cb, 10)
-        rclpy.spin(node)
+        rclpy.spin(self.node)
 
     def cb(self, msg):
         try:
