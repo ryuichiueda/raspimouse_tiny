@@ -15,10 +15,24 @@ def cb(msg):
         node.get_logger().info("cannot open /dev/rtbuzzer0")
 
 
+def music_cb(goal_handle):
+    global node
+    node.get_logger().info('Executing goal...')
+    result = Music.Result()
+    return result
+
+
 def main():
     rclpy.init()
     node = Node("buzzer")
     pub = node.create_subscription(UInt16, "buzzer", cb, 10)
+
+    music_server = ActionServer(
+            node,
+            Music,
+            'music',
+            music_cb)
+
     rclpy.spin(node)
 
 
