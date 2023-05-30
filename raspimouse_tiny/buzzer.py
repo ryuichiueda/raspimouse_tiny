@@ -29,7 +29,7 @@ class Buzzer:
         result = Music.Result()
         feedback = Music.Feedback()
         result.finished = True
-        #num = len(goal_handle.request)
+        num = len(goal_handle.request.freqs)
 
         return result
 
