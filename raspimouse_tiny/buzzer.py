@@ -14,12 +14,11 @@ class Buzzer:
         rclpy.spin(node)
 
     def cb(self, msg):
-        global node
         try:
             with open('/dev/rtbuzzer0','w') as f:
                 f.write(str(msg.data) + "\n")
         except:
-            node.get_logger().info("cannot open /dev/rtbuzzer0")
+            self.node.get_logger().info("cannot open /dev/rtbuzzer0")
 
 
 #def music_cb(goal_handle):
