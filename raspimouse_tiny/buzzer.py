@@ -11,7 +11,9 @@ class Buzzer:
         rclpy.init()
         self.node = Node("buzzer")
         self.pub = self.node.create_subscription(UInt16, "buzzer", self.cb, 10)
+        self.music_server = ActionServer(self.node, Music, 'music', self.music_cb)
         rclpy.spin(self.node)
+
 
     def cb(self, msg):
         try:
@@ -21,20 +23,14 @@ class Buzzer:
             self.node.get_logger().info("cannot open /dev/rtbuzzer0")
 
 
-#def music_cb(goal_handle):
-#    global node
-#    node.get_logger().info('Executing goal...')
-#    result = Music.Result()
-#    return result
+    def music_cb(self, goal_handle):
+        self.node.get_logger().info('Executing goal...')
+        result = Music.Result()
+        return result
 
 
 def main():
     node = Buzzer()
-    #rclpy.init()
-    #node = Node("buzzer")
-    #pub = node.create_subscription(UInt16, "buzzer", cb, 10)
-#    music_server = ActionServer(node, Music, 'music', music_cb)
- #   rclpy.spin(node)
 
 
 if __name__ == '__main__':
