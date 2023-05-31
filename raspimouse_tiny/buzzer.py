@@ -1,6 +1,6 @@
 # SPDX-FileCopyrightText: 2022 Ryuichi Ueda 　　　　　
 # SPDX-License-Identifier: BSD-3-Clause
-import rclpy
+import rclpy, time
 from rclpy.node import Node
 from rclpy.action import ActionServer
 from std_msgs.msg import UInt16
@@ -34,7 +34,7 @@ class Buzzer:
         result.finished = True
         for i, f in enumerate(goal_handle.request.freqs):
             self.buz(f)
-            sleep(goal_handle.request.durations[i])
+            time.sleep(goal_handle.request.durations[i])
 
         return result
 
