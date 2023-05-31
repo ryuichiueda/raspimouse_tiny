@@ -14,13 +14,16 @@ class Buzzer:
         self.music_server = ActionServer(self.node, Music, 'music', self.music_cb)
         rclpy.spin(self.node)
 
-
-    def cb(self, msg):
+    def buz(self, freq):
         try:
             with open('/dev/rtbuzzer0','w') as f:
-                f.write(str(msg.data) + "\n")
+                f.write(str(freq) + "\n")
         except:
             self.node.get_logger().info("cannot open /dev/rtbuzzer0")
+
+
+    def cb(self, msg):
+        self.buz(msg.data)
 
 
     def music_cb(self, goal_handle):
@@ -29,7 +32,9 @@ class Buzzer:
         result = Music.Result()
         feedback = Music.Feedback()
         result.finished = True
-        num = len(goal_handle.request.freqs)
+        for i, f in enumerate(goal_handle.request.freqs):
+            self.buz(f)
+            sleep(goal_handle.request.durations[i])
 
         return result
 
