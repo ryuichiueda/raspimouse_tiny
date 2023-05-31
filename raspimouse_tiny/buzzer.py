@@ -33,9 +33,12 @@ class Buzzer:
         feedback = Music.Feedback()
         result.finished = True
         for i, f in enumerate(goal_handle.request.freqs):
+            feedback.remaining_steps = len(goal_handle.request.freqs) - i
+            goal_handle.publish_feedback(feedback)
             self.buz(f)
             time.sleep(goal_handle.request.durations[i])
 
+        goal_handle.succeed()
         return result
 
 
