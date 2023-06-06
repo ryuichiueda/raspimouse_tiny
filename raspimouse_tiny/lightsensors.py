@@ -7,10 +7,17 @@ from raspimouse_tiny_msgs.msg import LightSensorValues
 class LightSensors():
     def __init__(self, node_ref):
         self.node = node_ref
+        self.node.declare_parameter("freq", 10)
         self.pub = self.node.create_publisher(LightSensorValues, "lightsensors", 10)
-        self.node.create_timer(0.1, self.cb)
+        self.freq = self.node.get_parameter("freq").value
+        self.timer = self.node.create_timer(1/self.freq, self.cb)
 
     def cb(self):
+        if self.freq != self.node.get_parameter("freq").value:
+            self.freq = self.node.get_parameter("freq").value
+            self.timer.destroy()
+            self.timer = self.node.create_timer(1/self.freq, self.cb)
+
         devfile = '/dev/rtlightsensor0'
         try:
             with open(devfile, 'r') as f:
